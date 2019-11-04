@@ -214,6 +214,7 @@ function BVP.ToolTipHook(t)
   end
   local auctionData = {}
   if BVP.showAhdb and AuctionDB and AuctionDB.AHGetAuctionInfoByLink then
+--    print("ahbot stub 1")
     auctionData = AuctionDB:AHGetAuctionInfoByLink(link)
   end
   if auctionData.numAuctions then
@@ -228,11 +229,21 @@ function BVP.ToolTipHook(t)
     t:AddLine(BVP:format(L["AHDB last scan: % |4auction:auctions;"] .. sellers .. L["% |4item:total items;"],
                          auctionData.numAuctions, auctionData.quantity))
   end
+--  print("ahbot stub 8")
   if BVP.showAhdbMinBid and auctionData.minBid then
     SetTooltipMoney(t, auctionData.minBid, "STATIC", L["AHDB minbid"], L[" (per item)"])
   end
   if auctionData.minBuyout then
     SetTooltipMoney(t, auctionData.minBuyout, "STATIC", L["AHDB buyout"], L[" (per item)"])
+  end
+  if auctionData.market3 then
+    SetTooltipMoney(t, auctionData.market3, "STATIC", "03日均价", L[" (per item)"])
+  end
+  if auctionData.market14 then
+    SetTooltipMoney(t, auctionData.market14, "STATIC", "14日均价", L[" (per item)"])
+  end
+  if auctionData.maxStock then
+    SetTooltipMoney(t, auctionData.maxStock, "STATIC", "最大仓储", L[" (per item)"])
   end
   local _, _, _, _, _, _, _, itemStackCount, _, _, itemSellPrice = GetItemInfo(link)
   BVP:Debug(2, "% Item % indiv sell price % stack size % (%)", t:GetName(), name, itemSellPrice, itemStackCount, link)
