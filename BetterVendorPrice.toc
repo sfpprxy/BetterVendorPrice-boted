@@ -1,5 +1,5 @@
 ## Interface: 11302
-## Title: Better Vendor Price
+## Title: [地精传送器] |cFF0099FF显示器|r
 ## Notes: Better Vendor Price with stack price information (|cFF99E5FF/bvp config|r)
 ## Author: MooreaTV moorea@ymail.com
 ## Version: v1.10.00
