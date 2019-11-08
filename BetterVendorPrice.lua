@@ -226,25 +226,36 @@ function BVP.ToolTipHook(t)
         sellers = BVP:format(L[" (% |4seller:sellers;), "], auctionData.numSellers)
       end
     end
-    t:AddLine(BVP:format(L["AHDB last scan: % |4auction:auctions;"] .. sellers .. L["% |4item:total items;"],
-                         auctionData.numAuctions, auctionData.quantity))
+--    t:AddLine(BVP:format(L["AHDB last scan: % |4auction:auctions;"] .. sellers .. L["% |4item:total items;"],
+--                         auctionData.numAuctions, auctionData.quantity))
+    t:AddLine(" ",1,1,0)
+    t:AddLine("来自藏宝海湾的行情",1,1,0)
   end
 --  print("ahbot stub 8")
-  if BVP.showAhdbMinBid and auctionData.minBid then
-    SetTooltipMoney(t, auctionData.minBid, "STATIC", L["AHDB minbid"], L[" (per item)"])
+--  if BVP.showAhdbMinBid and auctionData.minBid then
+--    SetTooltipMoney(t, auctionData.minBid, "STATIC", L["AHDB minbid"], L[" (per item)"])
+--  end
+--  if auctionData.minBuyout then
+--    SetTooltipMoney(t, auctionData.minBuyout, "STATIC", L["AHDB buyout"], L[" (per item)"])
+--  end
+  if auctionData.vIndex then
+    t:AddLine("价值指数 " .. tostring(auctionData.vIndex),1,1,1)
   end
-  if auctionData.minBuyout then
-    SetTooltipMoney(t, auctionData.minBuyout, "STATIC", L["AHDB buyout"], L[" (per item)"])
-  end
-  if auctionData.market3 then
-    SetTooltipMoney(t, auctionData.market3, "STATIC", "03日均价", L[" (per item)"])
-  end
-  if auctionData.market14 then
-    SetTooltipMoney(t, auctionData.market14, "STATIC", "14日均价", L[" (per item)"])
+  if not auctionData.maxStock or auctionData.maxStock == 0 then
+    auctionData.maxStock = 1
   end
   if auctionData.maxStock then
-    SetTooltipMoney(t, auctionData.maxStock, "STATIC", "最大仓储", L[" (per item)"])
+    t:AddLine("最大仓储 " .. tostring(auctionData.maxStock),1,1,1)
   end
+  if auctionData.market then
+    SetTooltipMoney(t, auctionData.market, "STATIC", "14日市场价")
+  end
+  if auctionData.marketD then
+    SetTooltipMoney(t, auctionData.marketD, "STATIC", "14日标准差")
+  end
+--  if auctionData.itemClass then
+--    SetTooltipMoney(t, auctionData.itemClass + "-" + auctionData.subClass, "STATIC", "类别", L[" (per item)"])
+--  end
   local _, _, _, _, _, _, _, itemStackCount, _, _, itemSellPrice = GetItemInfo(link)
   BVP:Debug(2, "% Item % indiv sell price % stack size % (%)", t:GetName(), name, itemSellPrice, itemStackCount, link)
   if not itemSellPrice or itemSellPrice <= 0 then
@@ -273,40 +284,40 @@ function BVP.ToolTipHook(t)
     if BVP.holdShiftForMore and not IsShiftKeyDown() then
       if count > 1 then
         if count == itemStackCount then
-          SetTooltipMoney(t, maxValue, "STATIC", L["Vendors for:"],
+          SetTooltipMoney(t, maxValue, "STATIC", L["Vendor for:"],
                           string.format(L[" (curr. full stack of %d)"], itemStackCount))
         else
-          SetTooltipMoney(t, curValue, "STATIC", L["Vendors for:"],
+          SetTooltipMoney(t, curValue, "STATIC", L["Vendor for:"],
                           string.format(L[" (current stack of %d/%d)"], count, itemStackCount))
         end
       else
-        SetTooltipMoney(t, itemSellPrice, "STATIC", L["Vendors for:"],
+        SetTooltipMoney(t, itemSellPrice, "STATIC", L["Vendor for:"],
                         string.format(L[" (per; stacks to %d)"], itemStackCount))
       end
     elseif BVP.showFullStack then
-      SetTooltipMoney(t, itemSellPrice, "STATIC", L["Vendors for:"], L[" (per item)"])
+      SetTooltipMoney(t, itemSellPrice, "STATIC", L["Vendor for:"], L[" (per item)"])
       if count > 1 and count ~= itemStackCount then
-        SetTooltipMoney(t, curValue, "STATIC", L["Vendors for:"], string.format(L[" (current stack of %d)"], count))
+        SetTooltipMoney(t, curValue, "STATIC", L["Vendor for:"], string.format(L[" (current stack of %d)"], count))
       end
       SetTooltipMoney(t, maxValue, "STATIC", L["Vendors for:"], string.format(L[" (full stack of %d)"], itemStackCount))
     else
       if count > 1 then
         if count == itemStackCount then
-          SetTooltipMoney(t, itemSellPrice, "STATIC", L["Vendors for:"], L[" (per item)"])
+          SetTooltipMoney(t, itemSellPrice, "STATIC", L["Vendor for:"], L[" (per item)"])
           SetTooltipMoney(t, maxValue, "STATIC", L["Vendors for:"],
                           string.format(L[" (curr. full stack of %d)"], itemStackCount))
         else
-          SetTooltipMoney(t, itemSellPrice, "STATIC", L["Vendors for:"],
+          SetTooltipMoney(t, itemSellPrice, "STATIC", L["Vendor for:"],
                           string.format(L[" (per; stacks to %d)"], itemStackCount))
           SetTooltipMoney(t, curValue, "STATIC", L["Vendors for:"], string.format(L[" (current stack of %d)"], count))
         end
       else
-        SetTooltipMoney(t, itemSellPrice, "STATIC", L["Vendors for:"],
+        SetTooltipMoney(t, itemSellPrice, "STATIC", L["Vendor for:"],
                         string.format(L[" (per; stacks to %d)"], itemStackCount))
       end
     end
   else
-    SetTooltipMoney(t, itemSellPrice, "STATIC", L["Vendors for:"], L[" (item doesn't stack)"])
+    SetTooltipMoney(t, itemSellPrice, "STATIC", L["Vendor for:"], L[" (item doesn't stack)"])
   end
   BVP:Debug(2, "t is % : %", t:GetName(), t.numMoneyFrames)
   return true
