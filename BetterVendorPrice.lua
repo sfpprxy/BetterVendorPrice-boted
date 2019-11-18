@@ -250,6 +250,13 @@ function BVP.ToolTipHook(t)
   if auctionData.market then
     SetTooltipMoney(t, auctionData.market, "STATIC", "14日市场价")
   end
+  if auctionData.change then
+    if auctionData.change > 0 then
+      SetTooltipMoney(t, auctionData.change, "STATIC", "14日上涨值")
+    else
+      SetTooltipMoney(t, -auctionData.change, "STATIC", "14日下跌值")
+    end
+  end
   if auctionData.marketD then
     SetTooltipMoney(t, auctionData.marketD, "STATIC", "14日标准差")
   end
